@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ODM Quoting System — Premium desktop app for quotations, tax invoices, GST/WHT calculations, PDF exports, and local offline business workflows.">
+    <title>ODM Quoting System | Premium Document &amp; Marketing Automation Suite</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <style>
+    :root {
+        --bg-color: #0b0f19;
+        --card-bg: rgba(255, 255, 255, 0.03);
+        --card-border: rgba(255, 255, 255, 0.08);
+        --primary: #6366f1;
+        --primary-hover: #4f46e5;
+        --primary-glow: rgba(99, 102, 241, 0.15);
+        --secondary: #10b981;
+        --secondary-hover: #059669;
+        --text-main: #f3f4f6;
+        --text-muted: #9ca3af;
+        --accent: #a855f7;
+        --glass-blur: 16px;
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    [data-theme="light"] {
+        --bg-color: #f8fafc;
+        --card-bg: rgba(0, 0, 0, 0.02);
+        --card-border: rgba(0, 0, 0, 0.08);
+        --primary: #4f46e5;
+        --primary-hover: #4338ca;
+        --primary-glow: rgba(79, 70, 229, 0.1);
+        --secondary: #059669;
+        --secondary-hover: #047857;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --accent: #9333ea;
+    }
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    html {
+        scroll-behavior: smooth;
+    }
+    body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        overflow-x: hidden;
+        transition: background-color 0.5s ease;
+        line-height: 1.6;
+    }
+    h1, h2, h3, .brand-logo {
+        font-family: 'Outfit', sans-serif;
+        font-weight: 700;
+    }
+    .glow-orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(120px);
+        z-index: -1;
+        opacity: 0.4;
+        pointer-events: none;
+    }
+    .orb-1 {
+        top: -10%;
+        right: 10%;
+        width: 400px;
+        height: 400px;
+        background: var(--primary);
+    }
+    .orb-2 {
+        top: 40%;
+        left: -10%;
+        width: 500px;
+        height: 500px;
+        background: var(--accent);
+    }
+    nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 8%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        backdrop-filter: blur(var(--glass-blur));
+        background: rgba(11, 15, 25, 0.7);
+        border-bottom: 1px solid var(--card-border);
+        transition: var(--transition);
+    }
+    [data-theme="light"] nav {
+        background: rgba(248, 250, 252, 0.8);
+    }
+    .brand {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        text-decoration: none;
+        color: var(--text-main);
+    }
+    .brand-logo {
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        color: white;
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        box-shadow: 0 4px 15px var(--primary-glow);
+    }
+    .brand-text {
+        font-size: 1.4rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+    }
+    .nav-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+        align-items: center;
+    }
+    .nav-links a {
+        color: var(--text-muted);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.95rem;
+        transition: var(--transition);
+    }
+    .nav-links a:hover {
+        color: var(--primary);
+    }
+    .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+    .theme-toggle, .mobile-toggle {
+        background: none;
+        border: none;
+        color: var(--text-main);
+        font-size: 1.2rem;
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--card-border);
+        transition: var(--transition);
+    }
+    .theme-toggle:hover {
+        background: var(--card-bg);
+        color: var(--primary);
+    }
+    .mobile-toggle {
+        display: none;
+    }
+    .btn-nav-download {
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        color: white !important;
+        padding: 0.6rem 1.4rem;
+        border-radius: 30px;
+        font-weight: 600 !important;
+        box-shadow: 0 4px 12px var(--primary-glow);
+    }
+    .btn-nav-download:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(99, 102, 241, 0.3);
+    }
+    .hero {
+        position: relative;
+        padding: 10rem 8% 6rem 8%;
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        align-items: center;
+        gap: 4rem;
+        min-height: 90vh;
+    }
+    .hero-content {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    .badge {
+        align-self: flex-start;
+        background: var(--primary-glow);
+        color: var(--primary);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        padding: 0.4rem 1rem;
+        border-radius: 30px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+    .hero-title {
+        font-size: 3.8rem;
+        line-height: 1.15;
+        letter-spacing: -1.5px;
+        background: linear-gradient(135deg, var(--text-main) 60%, var(--primary));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    [data-theme="light"] .hero-title {
+        background: linear-gradient(135deg, #0f172a 70%, #4f46e5);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .hero-description {
+        font-size: 1.15rem;
+        color: var(--text-muted);
+        max-width: 540px;
+    }
+    .download-actions {
+        display: flex;
+        gap: 1.25rem;
+        margin-top: 1rem;
+        flex-wrap: wrap;
+    }
+    .btn-download {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        padding: 1rem 1.8rem;
+        border-radius: 14px;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: var(--transition);
+        border: 1px solid transparent;
+        cursor: pointer;
+    }
+    .btn-win {
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        color: white;
+        box-shadow: 0 8px 24px var(--primary-glow);
+    }
+    .btn-win:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 30px rgba(99, 102, 241, 0.4);
+    }
+    .btn-mac {
+        background: var(--card-bg);
+        color: var(--text-main);
+        border: 1px solid var(--card-border);
+    }
+    .btn-mac:hover {
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateY(-3px);
+        border-color: var(--primary);
+    }
+    [data-theme="light"] .btn-mac:hover {
+        background: rgba(0, 0, 0, 0.05);
+    }
+    .btn-subtext {
+        display: block;
+        font-size: 0.75rem;
+        font-weight: 400;
+        opacity: 0.8;
+        margin-top: 2px;
+    }
+    .hero-visual {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .mockup-card {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+        border: 1px solid var(--card-border);
+        backdrop-filter: blur(var(--glass-blur));
+        border-radius: 24px;
+        width: 100%;
+        aspect-ratio: 4/3;
+        max-width: 520px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        position: relative;
+        overflow: hidden;
+        animation: float 6s ease-in-out infinite;
+    }
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-15px); }
+    }
+    .mockup-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--card-border);
+        padding-bottom: 0.75rem;
+    }
+    .mockup-dots {
+        display: flex;
+        gap: 6px;
+    }
+    .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+    }
+    .dot-r { background: #ff5f56; }
+    .dot-y { background: #ffbd2e; }
+    .dot-g { background: #27c93f; }
+    .mockup-title {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        font-weight: 500;
+    }
+    .mockup-body {
+        flex: 1;
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 1rem;
+    }
+    .mockup-sidebar {
+        border-right: 1px solid var(--card-border);
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding-right: 0.5rem;
+    }
+    .mockup-item {
+        height: 25px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 6px;
+        width: 85%;
+    }
+    .mockup-item.active {
+        background: var(--primary-glow);
+        border: 1px solid var(--primary);
+        width: 100%;
+    }
+    .mockup-main {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .mockup-chart {
+        height: 120px;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--card-border);
+        border-radius: 12px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-around;
+        padding: 10px;
+    }
+    .chart-bar {
+        width: 25px;
+        background: linear-gradient(to top, var(--primary), var(--accent));
+        border-radius: 6px 6px 0 0;
+        transition: var(--transition);
+        animation: barUp 2s ease-out forwards;
+    }
+    @keyframes barUp {
+        from { height: 0; }
+        to { height: var(--h); }
+    }
+    .mockup-table {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+    .table-row {
+        height: 16px;
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 4px;
+    }
+    .features {
+        padding: 6rem 8%;
+        background: rgba(255, 255, 255, 0.01);
+        border-top: 1px solid var(--card-border);
+        position: relative;
+    }
+    .section-header {
+        text-align: center;
+        max-width: 600px;
+        margin: 0 auto 4rem auto;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .section-title {
+        font-size: 2.5rem;
+        letter-spacing: -1px;
+    }
+    .section-subtitle {
+        color: var(--text-muted);
+        font-size: 1.05rem;
+    }
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+    }
+    .feature-card {
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 20px;
+        padding: 2.25rem;
+        transition: var(--transition);
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+    .feature-card:hover {
+        transform: translateY(-8px);
+        border-color: var(--primary);
+        box-shadow: 0 15px 30px var(--primary-glow);
+        background: rgba(255, 255, 255, 0.05);
+    }
+    [data-theme="light"] .feature-card:hover {
+        background: rgba(0, 0, 0, 0.01);
+    }
+    .feature-icon {
+        font-size: 2rem;
+        color: var(--primary);
+        background: var(--primary-glow);
+        width: 60px;
+        height: 60px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.5rem;
+    }
+    .feature-card h3 {
+        font-size: 1.35rem;
+        font-weight: 600;
+    }
+    .feature-card p {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+    .tax-banner {
+        margin-top: 4rem;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
+        border: 1px solid var(--primary);
+        border-radius: 20px;
+        padding: 2.5rem;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 2rem;
+    }
+    .tax-banner-text h4 {
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    .tax-banner-text p {
+        color: var(--text-muted);
+        font-size: 1rem;
+    }
+    .steps {
+        padding: 6rem 8%;
+        border-top: 1px solid var(--card-border);
+    }
+    .steps-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 3rem;
+        margin-top: 2rem;
+    }
+    .step-item {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        position: relative;
+    }
+    .step-number {
+        font-size: 3rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        opacity: 0.3;
+    }
+    .step-item h3 {
+        font-size: 1.25rem;
+    }
+    .step-item p {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        max-width: 280px;
+    }
+    .cta-section {
+        padding: 6rem 8%;
+        text-align: center;
+        position: relative;
+        background: radial-gradient(circle at center, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+        border-top: 1px solid var(--card-border);
+    }
+    .cta-content {
+        max-width: 700px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        align-items: center;
+    }
+    footer {
+        padding: 3rem 8%;
+        border-top: 1px solid var(--card-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        background: rgba(0, 0, 0, 0.2);
+    }
+    .footer-links {
+        display: flex;
+        gap: 2rem;
+    }
+    .footer-links a {
+        color: var(--text-muted);
+        text-decoration: none;
+        transition: var(--transition);
+        cursor: pointer;
+    }
+    .footer-links a:hover {
+        color: var(--primary);
+    }
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10000;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4s ease;
+    }
+    .modal.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+    .modal-content {
+        background: var(--bg-color);
+        border: 1px solid var(--card-border);
+        border-radius: 24px;
+        width: 90%;
+        max-width: 650px;
+        max-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+        transform: scale(0.9);
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .modal.active .modal-content {
+        transform: scale(1);
+    }
+    .modal-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid var(--card-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .modal-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+    .modal-close {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+    .modal-close:hover {
+        color: var(--primary);
+    }
+    .modal-body {
+        padding: 2rem;
+        overflow-y: auto;
+        font-size: 0.95rem;
+        color: var(--text-muted);
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+        line-height: 1.7;
+    }
+    .modal-body h4 {
+        color: var(--text-main);
+        font-weight: 600;
+        margin-top: 0.5rem;
+    }
+    .modal-body ul {
+        margin-left: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .modal-footer {
+        padding: 1.5rem 2rem;
+        border-top: 1px solid var(--card-border);
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+    }
+    .btn-modal-close {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+    .btn-modal-close:hover {
+        background: var(--primary-hover);
+    }
+    @media (max-width: 1024px) {
+        .hero {
+            grid-template-columns: 1fr;
+            text-align: center;
+            padding-top: 8rem;
+            gap: 3rem;
+        }
+        .hero-content {
+            align-items: center;
+        }
+        .badge {
+            align-self: center;
+        }
+        .hero-description {
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .download-actions {
+            justify-content: center;
+        }
+        .tax-banner {
+            grid-template-columns: 1fr;
+            text-align: center;
+        }
+        .steps-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+    }
+    @media (max-width: 768px) {
+        .nav-links {
+            display: none;
+        }
+        .mobile-toggle {
+            display: flex;
+        }
+        .hero-title {
+            font-size: 2.8rem;
+        }
+        footer {
+            flex-direction: column;
+            gap: 1.5rem;
+            text-align: center;
+        }
+    }
+    </style>
+</head>
+<body data-theme="dark">
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+
+    <nav>
+        <a href="#" class="brand">
+            <div class="brand-logo">
+                <i class="fa-solid fa-file-invoice-dollar" aria-hidden="true"></i>
+            </div>
+            <span class="brand-text">ODM Systems</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#workflow">Workflow</a></li>
+            <li><a href="#" onclick="openModal('terms-modal'); return false;">Terms</a></li>
+            <li><a href="#" onclick="openModal('privacy-modal'); return false;">Privacy</a></li>
+        </ul>
+        <div class="nav-actions">
+            <button type="button" class="theme-toggle" id="themeBtn" aria-label="Toggle light and dark theme">
+                <i class="fa-solid fa-sun" id="themeIcon" aria-hidden="true"></i>
+            </button>
+            <a href="#download" class="btn-nav-download">Download Now</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <span class="badge">V1.4 Stable Release</span>
+            <h1 class="hero-title">ODM Quoting Generator</h1>
+            <p class="hero-description">
+                A premium, lightning-fast desktop application engineered for seamless document compilation, advanced tax math calculation. Built for absolute professionals.
+            </p>
+            <div class="download-actions">
+                <a href="https://github.com/moawizsipra80/Quotation-Software/actions/runs/26716756540/artifacts/7317914654" class="btn-download btn-win" rel="noopener">
+                    <i class="fa-brands fa-windows fa-2x" aria-hidden="true"></i>
+                    <div>
+                        <span>Download for Windows</span>
+                        <span class="btn-subtext">Click to download Installer</span>
+                    </div>
+                </a>
+                <a href="https://github.com/moawizsipra80/Quotation-Software/actions/runs/26716756540/artifacts/7317904003" class="btn-download btn-mac" rel="noopener">
+                    <i class="fa-brands fa-apple fa-2x" aria-hidden="true"></i>
+                    <div>
+                        <span>Download for macOS</span>
+                        <span class="btn-subtext">Click to download App bundle</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="mockup-card">
+                <div class="mockup-header">
+                    <div class="mockup-dots">
+                        <div class="dot dot-r"></div>
+                        <div class="dot dot-y"></div>
+                        <div class="dot dot-g"></div>
+                    </div>
+                    <span class="mockup-title">ODM Quoting Generator</span>
+                    <i class="fa-solid fa-cog" style="font-size: 0.85rem; color: var(--text-muted);" aria-hidden="true"></i>
+                </div>
+                <div class="mockup-body">
+                    <div class="mockup-sidebar">
+                        <div class="mockup-item active"></div>
+                        <div class="mockup-item"></div>
+                        <div class="mockup-item"></div>
+                        <div class="mockup-item"></div>
+                    </div>
+                    <div class="mockup-main">
+                        <div class="mockup-chart">
+                            <div class="chart-bar" style="--h: 40px;"></div>
+                            <div class="chart-bar" style="--h: 70px;"></div>
+                            <div class="chart-bar" style="--h: 55px;"></div>
+                            <div class="chart-bar" style="--h: 90px;"></div>
+                            <div class="chart-bar" style="--h: 80px;"></div>
+                        </div>
+                        <div class="mockup-table">
+                            <div class="table-row"></div>
+                            <div class="table-row"></div>
+                            <div class="table-row"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="features" id="features">
+        <div class="section-header">
+            <span class="badge" style="background: rgba(16, 185, 129, 0.1); color: var(--secondary); border-color: rgba(16, 185, 129, 0.2);">Capabilities</span>
+            <h2 class="section-title">Designed for Enterprise Workflows</h2>
+            <p class="section-subtitle">A comprehensive suite to manage your quotes, taxes, deliveries, and marketing bots in one secure sandbox.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-file-pdf" aria-hidden="true"></i></div>
+                <h3>Document Generation</h3>
+                <p>Compile beautiful Quotations, Tax Invoices, Commercial Invoices, and Delivery Challans in seconds. Export to crystal-clear PDFs powered by ReportLab.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="color: var(--accent); background: rgba(168, 85, 247, 0.1);"><i class="fa-solid fa-calculator" aria-hidden="true"></i></div>
+                <h3>Advanced Tax Calculation</h3>
+                <p>Fully compliant with regional tax systems. Handles automatically calculated 18% standard GST and 5.5% withholding tax (WHT) calculations instantly.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="color: var(--secondary); background: rgba(16, 185, 129, 0.1);"><i class="fa-solid fa-robot" aria-hidden="true"></i></div>
+                <h3>Marketing Bots</h3>
+                <p>Automate client engagement campaigns via integrated bulk WhatsApp triggers and automated Instagram DM lead mining tools safely built with Selenium.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-chart-line" aria-hidden="true"></i></div>
+                <h3>Dashboard Insights</h3>
+                <p>Visual analytics maps, real-time monthly sales totals, detailed client ledgers, and secure role-based profile manager logins.</p>
+            </div>
+        </div>
+        <div class="tax-banner">
+            <div class="tax-banner-text">
+                <h4><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Security &amp; Offline Autonomy</h4>
+                <p>ODM Quoting system is built to operate fully locally on your device. Zero external servers touch your commercial SQLite databases, ensuring absolute business confidentiality.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="steps" id="workflow">
+        <div class="section-header">
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">Follow three simple steps to accelerate your commercial pipeline.</p>
+        </div>
+        <div class="steps-grid">
+            <div class="step-item">
+                <div class="step-number">01</div>
+                <h3>Download and Launch</h3>
+                <p>Get the binary package suitable for your OS. Run the setup and create your secure Admin Profile.</p>
+            </div>
+            <div class="step-item">
+                <div class="step-number">02</div>
+                <h3>Configure Settings</h3>
+                <p>Set up your company details, pre-filled tax headers, logos, and custom layout preferences in the settings panel.</p>
+            </div>
+            <div class="step-item">
+                <div class="step-number">03</div>
+                <h3>Execute with Speed</h3>
+                <p>Create quotes, print tax-invoices, manage customer logs, and fire targeted marketing bots in absolute record times.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="download">
+        <div class="cta-content">
+            <h2 class="section-title">Upgrade Your Business Today</h2>
+            <p class="section-subtitle" style="max-width: 500px;">Deploy the ultimate, fully local quotation workspace designed for serious enterprise operations.</p>
+            <div class="download-actions" style="margin-top: 1rem;">
+                <a href="https://github.com/moawizsipra80/Quotation-Software/actions/runs/26716756540/artifacts/7317914654" class="btn-download btn-win" rel="noopener">
+                    <i class="fa-brands fa-windows fa-2x" aria-hidden="true"></i>
+                    <div>
+                        <span>Download for Windows</span>
+                        <span class="btn-subtext">Click to download Installer</span>
+                    </div>
+                </a>
+                <a href="https://github.com/moawizsipra80/Quotation-Software/actions/runs/26716756540/artifacts/7317904003" class="btn-download btn-mac" rel="noopener">
+                    <i class="fa-brands fa-apple fa-2x" aria-hidden="true"></i>
+                    <div>
+                        <span>Download for macOS</span>
+                        <span class="btn-subtext">Click to download App bundle</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div>&copy; 2026 ODM Online Systems. All Rights Reserved.</div>
+        <div class="footer-links">
+            <a role="button" tabindex="0" onclick="openModal('terms-modal')">Terms &amp; Conditions</a>
+            <a role="button" tabindex="0" onclick="openModal('privacy-modal')">Privacy Policy</a>
+        </div>
+    </footer>
+
+    <div class="modal" id="terms-modal" role="dialog" aria-modal="true" aria-labelledby="terms-modal-title">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="terms-modal-title">Terms &amp; Conditions</h3>
+                <button type="button" class="modal-close" onclick="closeModal('terms-modal')" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h4>1. Licensing &amp; Usage</h4>
+                <p>The ODM Quoting System desktop application is licensed on a per-device model. By using the software, you agree to comply with regional digital trade guidelines and secure appropriate licensing keys.</p>
+                <h4>2. Offline Operation &amp; Privacy</h4>
+                <p>ODM System runs strictly local. Your SQLite databases, transaction logs, clients, and credentials reside purely on your local machine. You are solely responsible for database backup protocols.</p>
+                <h4>3. Automation Policies</h4>
+                <p>Selenium-based WhatsApp and Instagram automation bots are included for legitimate marketing campaigns. Users must adhere to platform limits to avoid rate-limiting or account suspension.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-modal-close" onclick="closeModal('terms-modal')">I Accept</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="privacy-modal" role="dialog" aria-modal="true" aria-labelledby="privacy-modal-title">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="privacy-modal-title">Privacy Policy</h3>
+                <button type="button" class="modal-close" onclick="closeModal('privacy-modal')" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h4>1. Information Collection</h4>
+                <p>Since the application executes entirely on local client machines, we collect zero telemetry, database logs, client accounts, invoice history, or passwords. Your data remains 100% yours.</p>
+                <h4>2. Local Security</h4>
+                <p>Passwords are locally hashed using secure cryptography hashes and stored inside your custom SQLite database sandbox. Security profiles are isolated and locked behind local authorization checkouts.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-modal-close" onclick="closeModal('privacy-modal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const body = document.body;
+    const themeBtn = document.getElementById('themeBtn');
+    const themeIcon = document.getElementById('themeIcon');
+    const THEME_KEY = 'odm-theme';
+
+    function applyTheme(theme) {
+        body.setAttribute('data-theme', theme);
+        themeIcon.className = theme === 'light' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+        try {
+            localStorage.setItem(THEME_KEY, theme);
+        } catch (_) {}
+    }
+
+    const savedTheme = (function () {
+        try {
+            return localStorage.getItem(THEME_KEY);
+        } catch (_) {
+            return null;
+        }
+    })();
+    if (savedTheme === 'light' || savedTheme === 'dark') {
+        applyTheme(savedTheme);
+    }
+
+    themeBtn.addEventListener('click', () => {
+        const next = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        applyTheme(next);
+    });
+
+    function openModal(id) {
+        document.getElementById(id).classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    window.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal')) {
+            e.target.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key !== 'Escape') return;
+        document.querySelectorAll('.modal.active').forEach((modal) => {
+            modal.classList.remove('active');
+        });
+        document.body.style.overflow = '';
+    });
+    </script>
+</body>
+</html>
